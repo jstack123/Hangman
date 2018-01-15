@@ -24,11 +24,12 @@ public class Hangman implements KeyListener {
 	JLabel wordsSolved;
 	String blankUnderscores = "";
 	String word = "";
+	int numberOfLives = 9;
 
 	public static void main(String[] args) throws IOException {
 		Hangman hangman = new Hangman();
 		hangman.saveWordsToArrayList();
-
+		hangman.EndingGame();
 	}
 
 	public void saveWordsToArrayList() throws IOException {
@@ -71,12 +72,12 @@ public class Hangman implements KeyListener {
 		word = stackOfWords.pop();
 
 		for (int i = 0; i < word.length(); i++) {
-			blankUnderscores += " _";
+			blankUnderscores += "_";
 		}
 
 		guess.setText("Guess a letter");
 		blankLines.setText(blankUnderscores);
-		lives.setText("You have 9 lives left.");
+		lives.setText("You have " + numberOfLives + " lives left.");
 		wordsSolved.setText("You have solved 0 words.");
 
 		frame.addKeyListener(this);
@@ -91,18 +92,48 @@ public class Hangman implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		String newBlanks = "";
 		// TODO Auto-generated method stub
+		System.out.println(word);
+		for (int i = 0; i < word.length(); i++) {
+			char entered = e.getKeyChar();
+			char current = word.charAt(i);
+			if (entered==current) {
+				newBlanks += entered;
+				
+			} else {
+				System.out.println(blankUnderscores.charAt(i));
+				newBlanks+=blankUnderscores.charAt(i);
+			}		
+		}
+		blankUnderscores = newBlanks;
+		blankLines.setText(blankUnderscores);
+		System.out.println(blankUnderscores);
 		if (word.contains("" + e.getKeyChar())) {
 			System.out.println("yes");
+			
 		} else {
 			System.out.println("no");
-		}
+			numberOfLives-=1;
+			lives.setText("" + numberOfLives);
+		} 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void EndingGame() {
+		/*if (numberOfLives==0) {
+			
+		}
+		
+		if (!blankUnderscores.contains("_")) {
+			JOptionPane.showMessageDialog(null, "WORD SOLVED");
+			stackOfWords.pop();
+		}*/
 	}
 
 	public Hangman() {
