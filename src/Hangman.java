@@ -24,12 +24,12 @@ public class Hangman implements KeyListener {
 	JLabel wordsSolved;
 	String blankUnderscores = "";
 	String word = "";
+	int numberOfSolvedWords;
 	int numberOfLives = 9;
 
 	public static void main(String[] args) throws IOException {
 		Hangman hangman = new Hangman();
 		hangman.saveWordsToArrayList();
-		hangman.EndingGame();
 	}
 
 	public void saveWordsToArrayList() throws IOException {
@@ -50,6 +50,7 @@ public class Hangman implements KeyListener {
 					list.add(w);
 				}
 				listOfWords = list.get(r);
+				stackOfWords.push(listOfWords);
 				System.out.println(listOfWords);
 
 			}
@@ -58,7 +59,7 @@ public class Hangman implements KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		stackOfWords.push(listOfWords);
+		
 
 		frame.add(panel);
 		panel.add(guess);
@@ -69,16 +70,12 @@ public class Hangman implements KeyListener {
 		frame.setSize(500, 200);
 		frame.setVisible(true);
 
-		word = stackOfWords.pop();
+		newWords();
 
-		for (int i = 0; i < word.length(); i++) {
-			blankUnderscores += "_";
-		}
-
-		guess.setText("Guess a letter");
+		guess.setText("GUESS A LETTER");
 		blankLines.setText(blankUnderscores);
 		lives.setText("You have " + numberOfLives + " lives left.");
-		wordsSolved.setText("You have solved 0 words.");
+		wordsSolved.setText("YOU HAVE SOLVED " + numberOfSolvedWords +  " WORDS.");
 
 		frame.addKeyListener(this);
 
@@ -115,8 +112,34 @@ public class Hangman implements KeyListener {
 		} else {
 			System.out.println("no");
 			numberOfLives-=1;
-			lives.setText("" + numberOfLives);
+			lives.setText("You have " + numberOfLives + " lives left.");
 		} 
+		
+		if (numberOfLives==0) {
+			EndingGame();
+		}
+		
+		if (!blankUnderscores.contains("_")) {
+			JOptionPane.showMessageDialog(null, "WORD SOLVED");
+			numberOfSolvedWords+=1;
+			wordsSolved.setText("YOU HAVE SOLVED " + numberOfSolvedWords +  " WORDS.");
+			newWords();
+			
+		}
+	}
+	
+	public void newWords() {
+		if (stackOfWords.size()> 0) {
+			word = stackOfWords.pop();
+			blankUnderscores = "";
+			for (int i = 0; i < word.length(); i++) {
+				blankUnderscores += "_";
+			}
+			blankLines.setText(blankUnderscores);
+		}
+		
+
+		
 	}
 
 	@Override
@@ -125,15 +148,11 @@ public class Hangman implements KeyListener {
 
 	}
 	
+	
 	public void EndingGame() {
-		/*if (numberOfLives==0) {
-			
-		}
+		JOptionPane.showMessageDialog(null, "GAME OVER!!! \n  You have solved " + numberOfSolvedWords + " words." );
 		
-		if (!blankUnderscores.contains("_")) {
-			JOptionPane.showMessageDialog(null, "WORD SOLVED");
-			stackOfWords.pop();
-		}*/
+		
 	}
 
 	public Hangman() {
