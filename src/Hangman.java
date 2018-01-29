@@ -118,12 +118,17 @@ public class Hangman implements KeyListener {
 		if (numberOfLives==0) {
 			EndingGame();
 		}
+		/*if (stackOfWords.size()==0) {
+			WinningGame();
+		}*/
 		
 		if (!blankUnderscores.contains("_")) {
 			JOptionPane.showMessageDialog(null, "WORD SOLVED");
 			numberOfSolvedWords+=1;
 			wordsSolved.setText("YOU HAVE SOLVED " + numberOfSolvedWords +  " WORDS.");
 			newWords();
+			numberOfLives=9;
+			lives.setText("You have " + numberOfLives + " lives left.");
 			
 		}
 	}
@@ -136,6 +141,8 @@ public class Hangman implements KeyListener {
 				blankUnderscores += "_";
 			}
 			blankLines.setText(blankUnderscores);
+		} else {
+			WinningGame();
 		}
 		
 
@@ -151,8 +158,11 @@ public class Hangman implements KeyListener {
 	
 	public void EndingGame() {
 		JOptionPane.showMessageDialog(null, "GAME OVER!!! \n  You have solved " + numberOfSolvedWords + " words." );
-		
-		
+		System.exit(1);
+	}
+	public void WinningGame() {
+		JOptionPane.showMessageDialog(null, "Congratulations! You solved all the words!");
+		System.exit(1);
 	}
 
 	public Hangman() {
